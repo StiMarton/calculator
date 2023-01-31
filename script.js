@@ -16,18 +16,25 @@ let calculation = {
     num: [],
 };
 
-calculatorDisplay1.textContent = calculation.num1;
-calculatorDisplay2.textContent = calculation.num2;
+let currentNum = 0;
+
+calculatorDisplay1.textContent = currentNum;
+calculatorDisplay2.textContent = calculation.num;
 
 // This loop makes the numbers functional
 // FIX: Each operator button pressed should save current num, and then start a new num
 for (let i = 0; i < numBtn.length; i++) {
     numBtn[i].addEventListener("click", function() {
+    if (calculation.operator == "add") {
+        num = numBtn[i].value;
+            calculatorDisplay2.textContent += num;
+            currentNum = calculatorDisplay2.textContent;
+    } else if (calculation.num = [""] ) {
         for (var num in calculation)
             num = numBtn[i].value;
             calculatorDisplay1.textContent += num;
-            calculation.num = calculatorDisplay1.textContent;
-            console.log(calculation.num);
+            currentNum = calculatorDisplay1.textContent;
+        } 
     })
 };
 
@@ -35,8 +42,10 @@ for (let i = 0; i < numBtn.length; i++) {
 //The add button should call the operate function
 addBtn.addEventListener("click", function() {
     calculation.operator = "add";
-    console.log(calculation.operator)
+    operatorDisplay.textContent = "+";
+    document.getElementById("operator").hidden = false;
     operate(add, calculation.num);
+    console.log(calculation.operator);
 })
 
 /* OLD Add button
@@ -69,9 +78,9 @@ subtractBtn.addEventListener("click", function() {
 
 equalBtn.addEventListener("click", function() {
     document.getElementById("output").hidden = false;
-    console.log(calculation.num1, calculation.num2);
+    console.log(calculation.num);
     if (calculation.operator == "add") {
-        add(calculation.num1, calculation.num2)
+        add(currentNum, calculation.num)
     } else if (calculation.operator == "subtract") {
         subtract(calculation.num1, calculation.num2)
     }
@@ -79,26 +88,36 @@ equalBtn.addEventListener("click", function() {
 
 clear.addEventListener("click", function() {
     calculation.num = 0;
+    currentNum = 0;
     calculation.operator = "";
-    calculatorDisplay1.textContent = calculation.num1;
+    calculatorDisplay1.textContent = currentNum;
     calculatorDisplay2.textContent = calculation.num2;
     document.getElementById("operator").hidden = true;
     document.getElementById("display2").hidden = true;
     document.getElementById("output").hidden = true;
 })
 
+function operate (operator, num1, num2) {
+    document.getElementById("display2").hidden = false;
+    calculation['num'].push(currentNum);
+    currentNum = 0;
+    calculatorDisplay2.textContent = currentNum;
+    return operator (num1, num2);
+}
+
+/* WIP Add with array
 function add (array) {
     return [array].reduce((partialSum, a) => partialSum + a, 0);
 }
-
-/*function add (num1, num2) {
-    num1 = Number(calculation.num1);
-    num2 = Number(calculation.num2);
+*/
+function add (num1, num2) {
+    num1 = Number(currentNum);
+    num2 = Number(calculation.num[1]);
     calculation.output = num1 + num2;
     outputDisplay.textContent = calculation.output;
     console.log(num1, num2);
 }
-*/
+
 
 function subtract (num1, num2) {
     num1 = Number(calculation.num1);
@@ -114,10 +133,6 @@ function multiply (num1, num2) {
 
 function divide (num1, num2) {
     return num1 / num2;
-}
-
-function operate (operator, num1, num2) {
-    return operator (num1, num2);
 }
 
 
