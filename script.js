@@ -6,7 +6,9 @@ const outputDisplay = document.querySelector("#output");
 const numBtn = document.getElementsByClassName("num-btn");
 const clearBtn = document.getElementById("clear");
 const addBtn = document.getElementById("add-btn");
-const subtractBtn = document.getElementById("subtract-btn")
+const subtractBtn = document.getElementById("subtract-btn");
+const multiplyBtn = document.getElementById("multiply-btn");
+const divideBtn = document.getElementById("divide-btn");
 const equalBtn = document.getElementById("equal");
 
 
@@ -18,6 +20,7 @@ let calculation = {
 
 let currentNum = 0;
 
+// Calculator only works with two numbers, currently
 calculatorDisplay1.textContent = currentNum;
 calculatorDisplay2.textContent = calculation.num;
 
@@ -25,7 +28,8 @@ calculatorDisplay2.textContent = calculation.num;
 // FIX: Each operator button pressed should save current num, and then start a new num
 for (let i = 0; i < numBtn.length; i++) {
     numBtn[i].addEventListener("click", function() {
-    if (calculation.operator == "add") {
+    if (calculation.operator == "add" || calculation.operator == "subtract"
+    || calculation.operator == "multiply" || calculation.operator == "divide") {
         num = numBtn[i].value;
             calculatorDisplay2.textContent += num;
             currentNum = calculatorDisplay2.textContent;
@@ -38,8 +42,6 @@ for (let i = 0; i < numBtn.length; i++) {
     })
 };
 
-//NEW ADD BUTTON
-//The add button should call the operate function
 addBtn.addEventListener("click", function() {
     calculation.operator = "add";
     operatorDisplay.textContent = "+";
@@ -48,32 +50,28 @@ addBtn.addEventListener("click", function() {
     console.log(calculation.operator);
 })
 
-/* OLD Add button
-addBtn.addEventListener("click", function() {
-    document.getElementById("operator").hidden = false;
-    document.getElementById("display2").hidden = false;
-    operatorDisplay.textContent = "+";
-    calculation.operator = "add";
-    if (!calculation.num1) {
-        calculation.num1 = calculatorDisplay1.textContent;
-    } else if (!calculation.num2) {
-        calculation.num2 = calculatorDisplay2.textContent;
-    }
-})
-*/
-
 subtractBtn.addEventListener("click", function() {
-    document.getElementById("operator").hidden = false;
-    document.getElementById("display2").hidden = false;
-    operatorDisplay.textContent = "-";
     calculation.operator = "subtract";
-    if (!calculation.num1) {
-        calculation.num1 = calculatorDisplay1.textContent;
-        console.log("Subtract 1 works");
-    } else if (!calculation.num2) {
-        calculation.num2 = calculatorDisplay2.textContent;
-        console.log("Subtract 2 works");
-    }
+    operatorDisplay.textContent = "-";
+    document.getElementById("operator").hidden = false;
+    operate(subtract, calculation.num);
+    console.log(calculation.operator);
+})
+
+multiplyBtn.addEventListener("click", function() {
+    calculation.operator = "multiply";
+    operatorDisplay.textContent = "x";
+    document.getElementById("operator").hidden = false;
+    operate(multiply, calculation.num);
+    console.log(calculation.operator);
+})
+
+divideBtn.addEventListener("click", function() {
+    calculation.operator = "divide";
+    operatorDisplay.textContent = "÷";
+    document.getElementById("operator").hidden = false;
+    operate(divide, calculation.num);
+    console.log(calculation.operator);
 })
 
 equalBtn.addEventListener("click", function() {
@@ -82,7 +80,11 @@ equalBtn.addEventListener("click", function() {
     if (calculation.operator == "add") {
         add(currentNum, calculation.num)
     } else if (calculation.operator == "subtract") {
-        subtract(calculation.num1, calculation.num2)
+        subtract(currentNum, calculation.num)
+    } else if (calculation.operator == "multiply") {
+        multiply(currentNum, calculation.num)
+    } else if (calculation.operator == "divide") {
+        divide(currentNum, calculation.num)
     }
 })
 
@@ -91,7 +93,7 @@ clear.addEventListener("click", function() {
     currentNum = 0;
     calculation.operator = "";
     calculatorDisplay1.textContent = currentNum;
-    calculatorDisplay2.textContent = calculation.num2;
+    calculatorDisplay2.textContent = calculation.num[1];
     document.getElementById("operator").hidden = true;
     document.getElementById("display2").hidden = true;
     document.getElementById("output").hidden = true;
@@ -105,11 +107,9 @@ function operate (operator, num1, num2) {
     return operator (num1, num2);
 }
 
-/* WIP Add with array
-function add (array) {
-    return [array].reduce((partialSum, a) => partialSum + a, 0);
-}
-*/
+
+// CALCULATION FUNCTIONS
+
 function add (num1, num2) {
     num1 = Number(currentNum);
     num2 = Number(calculation.num[1]);
@@ -118,36 +118,26 @@ function add (num1, num2) {
     console.log(num1, num2);
 }
 
-
 function subtract (num1, num2) {
-    num1 = Number(calculation.num1);
-    num2 = Number(calculation.num2);
+    num1 = Number(currentNum);
+    num2 = Number(calculation.num[1]);
     calculation.output = num1 - num2;
     outputDisplay.textContent = calculation.output;
     console.log(num1, num2);
 }
 
 function multiply (num1, num2) {
-    return num1 * num2;
+    num1 = Number(currentNum);
+    num2 = Number(calculation.num[1]);
+    calculation.output = num1 * num2;
+    outputDisplay.textContent = calculation.output;
+    console.log(num1, num2);
 }
 
 function divide (num1, num2) {
-    return num1 / num2;
+    num1 = Number(currentNum);
+    num2 = Number(calculation.num[1]);
+    calculation.output = num1 / num2;
+    outputDisplay.textContent = calculation.output;
+    console.log(num1, num2);
 }
-
-
-/* Old number presser
-for (let i = 0; i < numBtn.length; i++) {
-    numBtn[i].addEventListener("click", function() {
-    if (calculation.operator == "add" || calculation.operator == "subtract") {
-        num2 = numBtn[i].value;
-        calculatorDisplay2.textContent += num2;
-        calculation.num2 = calculatorDisplay2.textContent ;
-    } else {
-        num1 = numBtn[i].value;
-        calculatorDisplay1.textContent += num1;
-        calculation.num1 = calculatorDisplay1.textContent;
-    }
-    });
-}
-*/
