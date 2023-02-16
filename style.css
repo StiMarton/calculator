@@ -6,6 +6,11 @@ main {
     margin: auto;
 }
 
+.displayContainer {
+    display: flex;
+    gap: 1em;
+}
+
 .buttonContainer {
    max-width: 400px;
    display: flex;
