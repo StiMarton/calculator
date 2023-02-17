@@ -8,6 +8,7 @@ const operators = document.querySelectorAll(".op-btn");
 const clearBtn = document.getElementById("clear");
 const equalBtn = document.getElementById("equal");
 
+let equalsSelected; 
 let operator;
 let result;
 let calculation = {
@@ -30,20 +31,26 @@ clear.addEventListener("click", function() {
     operatorDisplay.textContent = operator;
     document.getElementById("operator").hidden = true;
     document.getElementById("display2").hidden = true;
+    equalsSelected = false;
 })
 
 for (let i = 0; i < numBtn.length; i++) {
     numBtn[i].addEventListener("click", function() {
-        if (!calculation.num1) {
+        if (calculation.num1 && equalsSelected) {
+            value = numBtn.value;
+            calculatorDisplay.textContent = value;
+            calculation.num1 = va
+            equalsSelected = false;
+        } else if (!calculation.num1) {
         for (var num in calculation)
             num = numBtn[i].value;
             calculatorDisplay.textContent += num;
             value = calculatorDisplay.textContent;
-        } else {
-            for (var num in calculation)
-                num = numBtn[i].value;
-                calculatorDisplay2.textContent += num;
-                value = calculatorDisplay2.textContent;
+    } else {
+        for (var num in calculation)
+            num = numBtn[i].value;
+            calculatorDisplay2.textContent += num;
+            value = calculatorDisplay2.textContent;
         }
     })
 };
@@ -68,6 +75,7 @@ operators.forEach(o => {
         }
         console.log(calculation);
         console.log(operator);
+        equalsSelected = false;
         return operator;
     })
 })
@@ -84,7 +92,7 @@ equalBtn.addEventListener("click", function() {
         calculatorDisplay.textContent = result;
         calculation.num2 = 0;
         calculatorDisplay2.textContent = "";
-        console.log("Equal 1 works");
+        console.log("Equal 1 is " + result);
     } else if (calculation.num1 && operator) {
         result = operate(operator, calculation.num1, calculation.num2)
         calculation.num1 = result;
@@ -93,6 +101,7 @@ equalBtn.addEventListener("click", function() {
     }
     console.log("The value of number two is " + calculation.num2);
     console.log("The operator is " + operator);
+    equalsSelected = true;
 })
 
 function operate(operator, num1, num2) {
