@@ -39,8 +39,7 @@ for (let i = 0; i < numBtn.length; i++) {
             num = numBtn[i].value;
             calculatorDisplay.textContent += num;
             value = calculatorDisplay.textContent;
-        }
-        if (calculation.num1) {
+        } else {
             for (var num in calculation)
                 num = numBtn[i].value;
                 calculatorDisplay2.textContent += num;
@@ -49,19 +48,18 @@ for (let i = 0; i < numBtn.length; i++) {
     })
 };
 
-operators.forEach(operator => {
-    operator.addEventListener("click", function() {
+operators.forEach(o => {
+    o.addEventListener("click", function() {
         document.getElementById("operator").hidden = false;
         document.getElementById("display2").hidden = false;
-        operator = operator.value;
-        operatorDisplay.textContent = operator;
+        operatorDisplay.textContent = o.textContent;
+        operator = operatorDisplay.textContent;
         if (operator) {
             if (calculation.num1 && calculation.num2) {
                 calculation.num1 = operate(operator, calculation.num1, calculation.num2);
                 calculation.num2 = "";
             }
         } 
-        console.log(operator);
         if (!calculation.num1) {
             calculation.num1 = value;
         } else {
@@ -74,61 +72,64 @@ operators.forEach(operator => {
     })
 })
 
+
+
 equalBtn.addEventListener("click", function() {
     calculation.num2 = value;
     if (calculation.num1 && calculation.num2 && operator) {
+        document.getElementById("operator").hidden = true;
+        document.getElementById("display2").hidden = true;
         result = operate(operator, calculation.num1, calculation.num2)
         calculation.num1 = result;
         calculatorDisplay.textContent = result;
-        calculation.num2 = "";
+        calculation.num2 = 0;
+        calculatorDisplay2.textContent = "";
+        console.log("Equal 1 works");
     } else if (calculation.num1 && operator) {
         result = operate(operator, calculation.num1, calculation.num2)
         calculation.num1 = result;
         calculatorDisplay.textContent = result;
+        console.log("Equal 2 works");
     }
     console.log("The value of number two is " + calculation.num2);
     console.log("The operator is " + operator);
 })
 
-function operate (operator, num1, num2) {
-    document.getElementById("display2").hidden = false;
-    calculation['num'].push(value);
-    value = 0;
-    calculatorDisplay2.textContent = value;
-    return operator (num1, num2);
+function operate(operator, num1, num2) {
+    switch (operator) {
+        case '+':
+            operator = "";
+            return add (num1, num2);
+        case '-':
+            operator = "";
+            return subtract (num1, num2);
+        case 'x':
+            operator = "";
+            return multiply (num1, num2);
+        case '÷':
+            operator = "";
+            return divide (num1, num2);
+    }
 }
-
 
 // CALCULATION FUNCTIONS
 
-function add (num1, num2) {
-    num1 = Number(calculation.num1);
-    num2 = Number(calculation.num2);
-    calculation.output = num1 + num2;
-    outputDisplay.textContent = calculation.output;
-    console.log(num1, num2);
+function add(num1, num2) {
+    return Number(num1) + Number(num2);
 }
 
-function subtract (num1, num2) {
-    num1 = Number(calculation.num1);
-    num2 = Number(calculation.num2);
-    calculation.output = num1 - num2;
-    outputDisplay.textContent = calculation.output;
-    console.log(num1, num2);
+function subtract(num1, num2) {
+    return num1 - num2;
 }
 
-function multiply (num1, num2) {
-    num1 = Number(calculation.num1);
-    num2 = Number(calculation.num2);
-    calculation.output = num1 * num2;
-    outputDisplay.textContent = calculation.output;
-    console.log(num1, num2);
+function multiply(num1, num2) {
+    return num1 * num2;
 }
 
-function divide (num1, num2) {
-    num1 = Number(calculation.num1);
-    num2 = Number(calculation.num2);
-    calculation.output = num1 / num2;
-    outputDisplay.textContent = calculation.output;
-    console.log(num1, num2);
+function divide(num1, num2) {
+    if (num2 == '0') {
+        alert('ERROR! You broke the calculator by dividing 0!');
+    } else {
+    return num1 / num2;
+    }
 }
