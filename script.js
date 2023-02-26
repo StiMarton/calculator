@@ -17,7 +17,6 @@ let calculation = {
     num2: null,
 };
 
-
 calculatorDisplay.textContent = calculation.num1;
 calculatorDisplay2.textContent = calculation.num2;
 
@@ -35,18 +34,23 @@ clear.addEventListener("click", function() {
 });
 
 dotBtn.addEventListener("click", function() {
+    if (result) {
+        result = null;
+    }
     if (!calculation.num1) {
         calculation.num1 = "0.";
     } else if (calculation.num1 && !operator && !calculation.num2) {
-        calculation.num1 = calculation.num1 + ".";
+        calculation.num1 = calculation.num1.toString() + ".";
     } else if (operator && !calculation.num2) {
         calculation.num2 = "0.";
     } else if (calculation.num2) {
-        calculation.num2 = calculation.num2 + ".";
+        calculation.num2 = calculation.num2.toString() + ".";
     }
     calculatorDisplay.textContent = calculation.num1;
+    if (calculation.num2) {
     calculatorDisplay2.textContent = calculation.num2;
-    console.log(result);
+        }
+    console.log(calculation.num1, operator, calculation.num2, result);
     disableDotBtn();
 });
 
